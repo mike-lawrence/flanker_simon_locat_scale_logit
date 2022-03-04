@@ -8,14 +8,16 @@ get_contrast_matrix_rows_as_list = function(
 	mm_list = lapply(
 		X = seq_len(nrow(mm))
 		, FUN = function(i){
-			array(
+			out = as_tibble(array(
 				mm[i,]
 				, dim = c(1,ncol(mm))
 				, dimnames = list(
 					NULL
 					, dimnames(mm)[[2]]
 				)
-			)
+			))
+			names(out) = dimnames(mm)[[2]]
+			return(out)
 		}
 	)
 	return(mm_list)

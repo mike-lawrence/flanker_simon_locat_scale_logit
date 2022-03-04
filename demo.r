@@ -37,7 +37,7 @@ print(dat)
 	%>% mutate(
 		contrasts = get_contrast_matrix_rows_as_list(
 			data = .
-			, formula = ~ flankers#*simon
+			, formula = ~ flankers*simon
 			, contrast_kind = halfhelmert_contrasts
 		)
 	)
@@ -107,7 +107,7 @@ print(dat)
 	%>% mutate(
 		contrasts = get_contrast_matrix_rows_as_list(
 			data = .
-			, formula = ~ flankers#*simon
+			, formula = ~ flankers*simon
 			, contrast_kind = halfhelmert_contrasts
 		)
 	)
@@ -321,7 +321,12 @@ post$cmdstan_diagnose()
 	%>% mutate(
 		index1 = as.numeric(index1)
 		, index2 = as.numeric(str_remove(index2,fixed(']')))
-		, variable = dimnames(gauss_Xc_with_vars$contrasts[[1]])[[2]][index1]
+		, variable = (
+			complete_binom_Xc_with_vars
+			%>% select(contrasts)
+			%>% unnest(contrasts)
+			%>% names()
+		)[index1]
 		, type = c('logRT Location','logRT Scale','logit Error')[index2]
 	)
 	%>% mutate(
@@ -524,7 +529,12 @@ post$cmdstan_diagnose()
 	%>% mutate(
 		index1 = as.numeric(index1)
 		, index2 = as.numeric(str_remove(index2,fixed(']')))
-		, variable = dimnames(gauss_Xc_with_vars$contrasts[[1]])[[2]][index1]
+		, variable = (
+			complete_binom_Xc_with_vars
+			%>% select(contrasts)
+			%>% unnest(contrasts)
+			%>% names()
+		)[index1]
 		, type = c('Location-Scale','Location-Error')[index2]
 	)
 	%>% mutate(
